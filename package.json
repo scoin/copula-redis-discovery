@@ -1,6 +1,6 @@
 {
   "name": "copula-redis-discovery",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Redis Discovery for Copula Framework",
   "main": "redis-discovery.js",
   "scripts": {
