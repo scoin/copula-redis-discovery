@@ -1,0 +1,14 @@
+{
+  "name": "copula-redis-discovery",
+  "version": "1.0.0",
+  "description": "Redis Discovery for Copula Framework",
+  "main": "redis-discovery.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "scoin",
+  "license": "ISC",
+  "dependencies": {
+    "redis": "^2.6.2"
+  }
+}
