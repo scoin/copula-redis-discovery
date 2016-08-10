@@ -5,7 +5,6 @@ module.exports = function(config){
 	var context = this;
 	var servicesChannel = config.channel || "services-" + (process.env.NODE_ENV || "development");
 	var services = {};
-	var serviceName = config.name;
 
 	var client = redis.createClient(config);
 	var pub = redis.createClient(config);
@@ -16,6 +15,8 @@ module.exports = function(config){
 
 	var announce = function(serviceInfo){
 
+		var serviceName = serviceInfo.name;
+
 		var id = generateRandomId(serviceName, serviceInfo);
 
 		services["self"] = {
@@ -25,7 +26,7 @@ module.exports = function(config){
 		}
 
 		client.on("subscribe", function(channel){
-			broadcastInfo(id, serviceInfo);
+			broadcastInfo();
 			context.events.emit("announce");
 		})
 
@@ -56,7 +57,7 @@ module.exports = function(config){
 						id: service.id,
 						info: service.info
 					}
-					broadcastInfo(id, serviceInfo);
+					broadcastInfo();
 
 					context.events.emit("connection", service);
 
@@ -66,6 +67,15 @@ module.exports = function(config){
 		})
 
 		client.subscribe(servicesChannel);
+
+		function broadcastInfo(){
+			pub.publish(servicesChannel, JSON.stringify({
+				name: serviceName,
+				id: id,
+				type: "announce",
+				info: serviceInfo
+			}))
+		}
 	}
 
 	var remove = function(){
@@ -77,15 +87,6 @@ module.exports = function(config){
 
 		client.unsubscribe();
 		client.quit();
-	}
-
-	function broadcastInfo(id, serviceInfo){
-		pub.publish(servicesChannel, JSON.stringify({
-			name: serviceName,
-			id: id,
-			type: "announce",
-			info: serviceInfo
-		}))
 	}
 
 	return {
