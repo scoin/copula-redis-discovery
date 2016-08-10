@@ -3,7 +3,7 @@ var crypto = require('crypto');
 
 module.exports = function(config){
 	var context = this;
-	var servicesChannel = config.channel || "services-" + process.env.NODE_ENV || "development";
+	var servicesChannel = config.channel || "services-" + (process.env.NODE_ENV || "development");
 	var services = {};
 	var serviceName = config.name;
 
